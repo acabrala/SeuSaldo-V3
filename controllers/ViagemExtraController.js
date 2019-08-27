@@ -51,10 +51,8 @@ class ViagemExtraController {
 
             if(saldoComum == null || undefined){
             	saldoComum = saldoComum
-            	console.log('1')
             } else {
             	saldoComum = parseFloat(saldoComum)
-            	            	console.log('2')
 
             }
 
@@ -122,10 +120,9 @@ class ViagemExtraController {
                             error: true,
                             message: "Erro: " + err
                         }
+                        return response
 
                     })
-                    return response
-
                 } else {
                     return outros
                 }
@@ -193,23 +190,18 @@ function retirarSaldoOnibus(quantidadeOnibus, saldo_vt, saldo_ve, saldo_comum, p
         for (i = quantidadeOnibus; i < 0; i++) {
             if (saldo_vt >= 4.00) {
                 saldo_vt -= 4
-                 console.log('onibus' +saldo_vt)
-
                 update = true;
             } else if (passeLivreOnibus > 0) {
                 passeLivreOnibus -= 1
-                
                 update = true;
 
             } else if (saldo_ve >= 2) {
                 saldo_ve -= 2
-                
                 update = true
 
             } else if (cotaDiariaOnibus > 0) {
                 cotaDiariaOnibus -= 1
                 update = true;
-
             }
 
             else if (saldo_comum >= 4) {

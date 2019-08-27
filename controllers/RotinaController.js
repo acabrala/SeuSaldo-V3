@@ -40,7 +40,7 @@ class RotinaController {
 		return this.Rotina.create(rotina)
 			.then(function (rotina) {
 
-				var response = {
+				let response = {
 					error: false,
 					message: "Rotinas inseridas com sucesso!",
 					id: rotina.dataValues.id
@@ -97,12 +97,8 @@ class RotinaController {
 					}
 
 					Detalhesrotina.create(payload).then(results => {
-						console.log('fjsfhd asdsa')
 					});
 				}
-
-				console.log(diasRotinaUsuario)
-				//this.detalherotina.create
 
 				return response;
 			}).catch(function (err) {
@@ -110,11 +106,87 @@ class RotinaController {
 			});
 	}
 
+	async createAll(userID, rotina, Detalhesrotina, diasWeekday, BilheteUnico, bilhete) {
+
+		let diasRotinaUsuario = [];
+		let bu = await this.BilheteUnico.create(bilhete)
+
+		if (bu) {
+			rotina.usuario_id = userID;
+			return this.Rotina.create(rotina)
+				.then(function (rotina) {
+
+					let response = {
+						error: false,
+						message: "Rotinas inseridas com sucesso!",
+						id: rotina.dataValues.id
+					};
+
+					if (diasWeekday.domingo == 1) {
+						diasRotinaUsuario.push(7)
+					} else {
+						diasRotinaUsuario.push(0)
+					}
+					if (diasWeekday.segunda == 1) {
+						diasRotinaUsuario.push(1)
+					} else {
+						diasRotinaUsuario.push(0)
+					}
+					if (diasWeekday.terca == 1) {
+						diasRotinaUsuario.push(2)
+					} else {
+						diasRotinaUsuario.push(0)
+					}
+					if (diasWeekday.quarta == 1) {
+						diasRotinaUsuario.push(3)
+					} else {
+						diasRotinaUsuario.push(0)
+					}
+					if (diasWeekday.quinta == 1) {
+						diasRotinaUsuario.push(4)
+					} else {
+						diasRotinaUsuario.push(0)
+					}
+					if (diasWeekday.sexta == 1) {
+						diasRotinaUsuario.push(5)
+					} else {
+						diasRotinaUsuario.push(0)
+					}
+					if (diasWeekday.sabado == 1) {
+						diasRotinaUsuario.push(6)
+					} else {
+						diasRotinaUsuario.push(0)
+					}
+
+					for (let i = 0; i <= diasRotinaUsuario.length - 1; i++) {
+
+						let payload = {
+							weekday: diasRotinaUsuario[i],
+							id_rotina: rotina.dataValues.id,
+							id_bilhete: rotina.id_bilhete
+						}
+
+						Detalhesrotina.create(payload).then(results => {
+						});
+					}
+
+					return response;
+				}).catch(function (err) {
+					return errorResponse("Erro ao inserir suas rotinas. Erro: " + err.message);
+				});
+
+		} else {
+
+			return 
+
+		}
+	}
+
 	update(userID, rotina, Detalhesrotina, diasWeekday) {
 
 		let rotinaID = rotina.id;
 		let diasRotinaUsuario = [];
-		let idsDetalhesArray = [] 
+		let idsDetalhesArray = []
 
 		return this.Rotina.update(rotina, {
 			where: {
@@ -122,11 +194,8 @@ class RotinaController {
 			}
 		}).then(function (rotina) {
 
-			
-
-
 			if (diasWeekday.domingo == true) {
-				diasRotinaUsuario.push(7)				
+				diasRotinaUsuario.push(7)
 			} else {
 				diasRotinaUsuario.push(0)
 			}
@@ -155,38 +224,36 @@ class RotinaController {
 				diasRotinaUsuario.push(5)
 			} else {
 				diasRotinaUsuario.push(0)
-
 			}
 			if (diasWeekday.sabado == true) {
 				diasRotinaUsuario.push(6)
 			} else {
 				diasRotinaUsuario.push(0)
-
 			}
-			
-			Detalhesrotina.findAll({where: {
-				id_rotina: rotinaID
-			}}).then(function (idDetalhes){
-				for(let z = 0; z < idDetalhes.length; z++){
 
+			Detalhesrotina.findAll({
+				where: {
+					id_rotina: rotinaID
+				}
+			}).then(function (idDetalhes) {
+				for (let z = 0; z < idDetalhes.length; z++) {
 					idsDetalhesArray.push(idDetalhes[z].dataValues.id)
 					idsDetalhesArray.sort()
 				}
 
-				
 				for (let i = 0; i <= diasRotinaUsuario.length - 1; i++) {
 
 					let payload = {
-						weekday: diasRotinaUsuario[i]}
-	
+						weekday: diasRotinaUsuario[i]
+					}
+
 					Detalhesrotina.update(payload, {
 						where: {
-							[Op.and]: [{ id: idsDetalhesArray[i]}]
+							[Op.and]: [{ id: idsDetalhesArray[i] }]
 						}
 					}).then(results => {
 					});
 				}
-				
 			})
 
 			return successResponse('Rotina atualizada com sucesso.');

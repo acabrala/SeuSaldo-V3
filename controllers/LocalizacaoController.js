@@ -19,10 +19,8 @@ class LocalizacaoController {
         return axios.get(url).then((result) => {
             let cidade;
             let estado;
-            // return result.data.results[0].address_components
             result.data.results[0].address_components.map((item) => {
                 item.types.filter((adm_area) => {
-
 
                     if (adm_area == "administrative_area_level_2") {
                         cidade = item.long_name
@@ -38,10 +36,8 @@ class LocalizacaoController {
                 Cidade: cidade,
                 Estado: estado
             }
-
         })
     }
-
 }
 
 module.exports = LocalizacaoController;

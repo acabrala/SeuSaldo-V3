@@ -24,18 +24,47 @@ module.exports = function (app) {
 				res.json(response);
 			});
 	});
+	app.post('/usuarios/:user_id/todas', ((req, res) => {
+
+		let userID = req.params.userID;
+		let diasWeekday = {
+			domingo: req.body.domingo,
+			segunda: req.body.segunda,
+			terca: req.body.terca,
+			quarta: req.body.quarta,
+			quinta: req.body.quinta,
+			sexta: req.body.sexta,
+			sabado: req.body.sabado
+		}
+
+		let bilhete_unico = {
+			numero_bilhete: req.body.numero_bilhete,
+			apelido_bilhete: req.body.apelido_bilhete,
+			is_bu: req.params.is_bus,
+			tipo_cartao: req.body.tipo_cartao
+		}
+
+		rotinaController.createAll(userID, req.body, DetalhesRotina, diasWeekday, BilheteUnico, bilhete_unico)
+			.then((response) => {
+
+			})
+
+	}))
 
 	// Criar rotina
 	app.post('/usuarios/:user_id/rotinas', function (req, res) {
 
-		var userID = req.params.user_id;
-		let diasWeekday = {domingo : req.body.domingo,
-			segunda : req.body.segunda,
-			terca : req.body.terca,
-			quarta : req.body.quarta,
-			quinta : req.body.quinta,
-			sexta : req.body.sexta,
-			sabado : req.body.sabado}
+		let userID = req.params.user_id;
+		let diasWeekday = {
+			domingo: req.body.domingo,
+			segunda: req.body.segunda,
+			terca: req.body.terca,
+			quarta: req.body.quarta,
+			quinta: req.body.quinta,
+			sexta: req.body.sexta,
+			sabado: req.body.sabado
+		}
+
 
 		rotinaController.create(userID, req.body, DetalhesRotina, diasWeekday)
 			.then(function (response) {
@@ -48,17 +77,15 @@ module.exports = function (app) {
 
 		var userID = req.params.user_id;
 
-		let diasWeekday = { domingo : req.body.domingo,
-			segunda : req.body.segunda,
-			terca : req.body.terca,
-			quarta : req.body.quarta,
-			quinta : req.body.quinta,
-			sexta : req.body.sexta,
-			sabado : req.body.sabado }
-
-			console.log(diasWeekday);
-			
-
+		let diasWeekday = {
+			domingo: req.body.domingo,
+			segunda: req.body.segunda,
+			terca: req.body.terca,
+			quarta: req.body.quarta,
+			quinta: req.body.quinta,
+			sexta: req.body.sexta,
+			sabado: req.body.sabado
+		}
 
 
 		rotinaController.update(userID, req.body, DetalhesRotina, diasWeekday)
@@ -66,7 +93,7 @@ module.exports = function (app) {
 
 				res.json(response);
 			});
-		});
+	});
 
 	app.get('/teste/:usuario_id', function (req, res) {
 
@@ -78,6 +105,6 @@ module.exports = function (app) {
 			});
 	});
 
-	
+
 
 }

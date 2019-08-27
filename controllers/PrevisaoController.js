@@ -16,7 +16,7 @@ let retornoPl = String();
 let retornoDiario = String();
 let previsoes = Array();
 let dataInicio = format.asString('dd/MM/yyyy', new Date())
-var i;
+let i;
 let update;
 let data_push = String()
 let dateFormat = require('dateformat');
@@ -41,9 +41,7 @@ class PrevisaoController {
     constructor(Previsao) {
         this.Previsao = Previsao;
     }
-
-
-
+    
     calcularPrevisao(UserID, rotina, BilheteID, detalhesRotinas) {
         let contador = 0;
         let _this = this
@@ -107,28 +105,20 @@ class PrevisaoController {
                 }
 
             }
-            //console.log(arraysRotinas)
 
+            let dados_rotina = previsao[0].dataValues.Rotinas
 
-
-            //console.log(previsao[0].dataValues.Rotinas)
-
-            var dados_rotina = previsao[0].dataValues.Rotinas
-            //console.log(previsao[0].dataValues.DetalhesRotinas)
-
-
-
-            var saldo_comum = previsao[0].saldo_comum
-            var saldo_vt = previsao[0].saldo_vt
-            var saldo_estudante = previsao[0].saldo_estudante
-            var cota_onibus = previsao[0].cota_onibus
-            var cota_trilho = previsao[0].cota_trilho
-            var cota_diaria_onibus = previsao[0].cota_diaria_onibus
-            var cota_diaria_trilho = previsao[0].cota_diaria_trilho
-            var valor = dados_rotina.valor
-            var tipoViagem = dados_rotina.id_tipo
-            var isPasseLivre = previsao[0].flag_carteira_passe_livre
-            var previsaoPush = previsao[0].data_duracao_credito
+            let saldo_comum = previsao[0].saldo_comum
+            let saldo_vt = previsao[0].saldo_vt
+            let saldo_estudante = previsao[0].saldo_estudante
+            let cota_onibus = previsao[0].cota_onibus
+            let cota_trilho = previsao[0].cota_trilho
+            let cota_diaria_onibus = previsao[0].cota_diaria_onibus
+            let cota_diaria_trilho = previsao[0].cota_diaria_trilho
+            let valor = dados_rotina.valor
+            let tipoViagem = dados_rotina.id_tipo
+            let isPasseLivre = previsao[0].flag_carteira_passe_livre
+            let previsaoPush = previsao[0].data_duracao_credito
             let isDiario = previsao[0].flag_carteira_diario
 
             let diasSemanas = [
@@ -141,15 +131,15 @@ class PrevisaoController {
                 'sabado'
             ];
 
-            var cotaOnibus = 0;
-            var cotaTrilho = 0;
+            let cotaOnibus = 0;
+            let cotaTrilho = 0;
 
 
             for (let k = 0; k <= 6; k++) {
-                var cotaTrilhoDesconto = false;
+                let cotaTrilhoDesconto = false;
                 for (let i = 0; i <= (dados_rotina.length - 1); i++) {
                     if (arraysRotinas[i][diasSemanas[k]]) {
-                        var tipoRotina = dados_rotina[i].id_tipo
+                        let tipoRotina = dados_rotina[i].id_tipo
                         switch (tipoRotina) {
                             case 0:
                                 cotaOnibus++
@@ -158,7 +148,6 @@ class PrevisaoController {
                                 if (cotaTrilhoDesconto == false) {
                                     cotaTrilho++
                                     cotaTrilhoDesconto = true;
-
                                 }
                                 break;
                             case 2:
@@ -175,16 +164,14 @@ class PrevisaoController {
                 }
             }
 
-            var cotaOnibusDiario = 0;
-            var cotaTrilhoDiario = 0;
-
-
+            let cotaOnibusDiario = 0;
+            let cotaTrilhoDiario = 0;
 
             for (let k = 0; k <= 6; k++) {
-                var descontoDiario = false;
+                let descontoDiario = false;
                 for (let i = 0; i <= (dados_rotina.length - 1); i++) {
                     if (arraysRotinas[i][diasSemanas[k]]) {
-                        var tipoRotina = dados_rotina[i].id_tipo
+                        let tipoRotina = dados_rotina[i].id_tipo
                         switch (tipoRotina) {
                             case 0:
                                 if (descontoDiario == false) {
@@ -206,19 +193,18 @@ class PrevisaoController {
                                     descontoDiario = true
                                     break;
                                 }
-
                         }
                     }
                 }
             }
 
-            var valorSemanal = 0.00
-            var valorSemanalEstudante = 0.00
+            let valorSemanal = 0.00
+            let valorSemanalEstudante = 0.00
             for (let i = 0; i <= (dados_rotina.length - 1); i++) {
-                var ativos = 0;
+                let ativos = 0;
                 for (let k = 0; k <= 6; k++) {
                     if (arraysRotinas[i][diasSemanas[k]]) {
-                        var tipoRotina = dados_rotina[i].id_tipo
+                        let tipoRotina = dados_rotina[i].id_tipo
                         if (dados_rotina[i]['rotina_desativada'] == true) {
                             valorSemanal = valorSemanal + 0.00
                         } else {
@@ -242,17 +228,14 @@ class PrevisaoController {
                     message: 'Rotinas Desativadas'
                 }
             } else {
-                console.log(valorSemanal)
                 let valorDiario = valorSemanal / 7
-                if( valorDiario < 4.30){
+                if (valorDiario < 4.30) {
                     valorDiario = 4.30
                 }
 
                 retornoVt = _this.previsaoValeTransporte(valorSemanal, saldo_vt)
-                
-                    retornoVe = _this.previsaoEstudante(retornoVt, saldo_estudante, valorSemanalEstudante)
-                    retornoPl = _this.previsaoPasseLivre(retornoVt, cota_onibus, cota_trilho, cotaOnibus, cotaTrilho)
-
+                retornoVe = _this.previsaoEstudante(retornoVt, saldo_estudante, valorSemanalEstudante)
+                retornoPl = _this.previsaoPasseLivre(retornoVt, cota_onibus, cota_trilho, cotaOnibus, cotaTrilho)
 
                 if (isPasseLivre == true) {
                     retornoDiario = _this.previsaoDiario(retornoPl.onibus, cota_diaria_onibus, cota_diaria_trilho, cotaOnibusDiario, cotaTrilhoDiario)
@@ -261,16 +244,13 @@ class PrevisaoController {
                 }
 
                 retornoVc = _this.previsaoComum(retornoDiario.onibus, saldo_comum, valorSemanal)
-
-
-                var gastoDiario = (valorSemanal / 7).toFixed(2)
-                var gastoSemanal = valorSemanal
-                var gastoMensal = valorSemanal * 4
+                let gastoDiario = (valorSemanal / 7).toFixed(2)
+                let gastoSemanal = valorSemanal
+                let gastoMensal = valorSemanal * 4
 
                 if (saldo_vt < valorDiario) {
                     retornoVt = 'Seu saldo está abaixo do valor diário'
                 }
-
 
                 if (cota_onibus < cotaOnibus / 7 || cota_trilho < cotaTrilho / 7 || (cota_onibus <= 0 && cota_trilho <= 0)) {
                     retornoPl.onibus = 'Seu saldo está abaixo do valor diário'
@@ -282,13 +262,10 @@ class PrevisaoController {
                 }
 
                 data_push = retornoVc
-                console.log(saldo_comum)
-                console.log(valorDiario)
                 if (saldo_comum <= valorDiario) {
                     retornoVc = 'Seu saldo está abaixo do valor diário'
                     data_push = data
                 }
-                console.log(retornoVc)
 
                 if (cota_diaria_onibus < cotaOnibusDiario / 7 || cota_diaria_trilho < cotaTrilhoDiario / 7) {
                     retornoDiario.onibus = 'Seu saldo está abaixo do valor diário'
@@ -297,7 +274,6 @@ class PrevisaoController {
                 if (retornoVc != previsaoPush || previsaoPush == null || undefined) {
 
                     let newDate = data_push.split("/").reverse().join("-");
-
                     let payload = { 'data_duracao_credito': newDate }
 
                     _this.Previsao.update(payload, {
@@ -342,10 +318,10 @@ class PrevisaoController {
     previsaoValeTransporte(valorSemanal, saldo_vt) {
         duracaoSemanaVt = saldo_vt / valorSemanal
         if (duracaoSemanaVt != NaN || undefined || null) {
-            var previsaoVt = moment().add(duracaoSemanaVt, 'weeks').format('DD/MM/YYYY')
+            let previsaoVt = moment().add(duracaoSemanaVt, 'weeks').format('DD/MM/YYYY')
             return previsaoVt
         } else {
-            var previsaoVt = moment().add(dataInicio, 'weeks').format('DD/MM/YYYY')
+            let previsaoVt = moment().add(dataInicio, 'weeks').format('DD/MM/YYYY')
             return previsaoVt
         }
     }
@@ -353,31 +329,30 @@ class PrevisaoController {
     previsaoEstudante(previsaoValeTransporte, saldo_estudante, valorSemanal) {
         duracaoSemanaVe = saldo_estudante / valorSemanal
         if (duracaoSemanaVe != null || undefined || NaN) {
-            var previsaoVe = moment(previsaoValeTransporte, 'DD-MM-YYYY').add(duracaoSemanaVe, 'weeks').format('DD/MM/YYYY')
+            let previsaoVe = moment(previsaoValeTransporte, 'DD-MM-YYYY').add(duracaoSemanaVe, 'weeks').format('DD/MM/YYYY')
             return previsaoVe
         } else {
-            var previsaoVe = previsaoValeTransporte
+            let previsaoVe = previsaoValeTransporte
             return previsaoVe
         }
     }
 
     previsaoPasseLivre(previsaoValeTransporte, qtd_cota_onibus, qtd_cota_trilho, cotaOnibus, cotaTrilho) {
-        if(cotaOnibus <= 0 || qtd_cota_onibus <= 0){
+        if (cotaOnibus <= 0 || qtd_cota_onibus <= 0) {
             duracaoSemanaPasseLivreOnibus = 0
         } else {
+            duracaoSemanaPasseLivreOnibus = qtd_cota_onibus / cotaOnibus
+        }
 
-        duracaoSemanaPasseLivreOnibus = qtd_cota_onibus / cotaOnibus
-    }
+        if (cotaTrilho <= 0 || qtd_cota_trilho <= 0) {
+            duracaoSemanaPasseLivreTrilho = 0
+        } else {
+            duracaoSemanaPasseLivreTrilho = qtd_cota_trilho / cotaTrilho
 
-    if(cotaTrilho <= 0 || qtd_cota_trilho <= 0){
-        duracaoSemanaPasseLivreTrilho = 0
-    } else {
-        duracaoSemanaPasseLivreTrilho = qtd_cota_trilho / cotaTrilho
-
-    }   
+        }
         if (duracaoSemanaPasseLivreOnibus != null || undefined) {
-            var previsaoPlo = moment(previsaoValeTransporte, 'DD-MM-YYYY').add(duracaoSemanaPasseLivreOnibus, 'weeks').format('DD/MM/YYYY')
-            var previsaoPlt = moment(previsaoValeTransporte, 'DD-MM-YYYY').add(duracaoSemanaPasseLivreTrilho, 'weeks').format('DD/MM/YYYY')
+            let previsaoPlo = moment(previsaoValeTransporte, 'DD-MM-YYYY').add(duracaoSemanaPasseLivreOnibus, 'weeks').format('DD/MM/YYYY')
+            let previsaoPlt = moment(previsaoValeTransporte, 'DD-MM-YYYY').add(duracaoSemanaPasseLivreTrilho, 'weeks').format('DD/MM/YYYY')
 
             return {
                 onibus: previsaoPlo,
@@ -385,7 +360,7 @@ class PrevisaoController {
             }
 
         } else {
-            var previsaoPlo = previsaoValeTransporte
+            let previsaoPlo = previsaoValeTransporte
             return previsaoPlo
         }
     }
@@ -393,43 +368,40 @@ class PrevisaoController {
     previsaoComum(previsaoEstudante, saldo_comum, valorSemanal) {
         duracaoSemanaVc = saldo_comum / valorSemanal
         if (previsaoEstudante != null || undefined) {
-            var previsaoVc = moment(previsaoEstudante, 'DD-MM-YYYY').add(duracaoSemanaVc, 'weeks').format('DD/MM/YYYY')
+            let previsaoVc = moment(previsaoEstudante, 'DD-MM-YYYY').add(duracaoSemanaVc, 'weeks').format('DD/MM/YYYY')
             return previsaoVc
         } else {
-            var previsaoVe = moment(dataInicio, 'DD-MM-YYYY').add(duracaoSemanaVc, 'weeks').format('DD/MM/YYYY')
+            let previsaoVe = moment(dataInicio, 'DD-MM-YYYY').add(duracaoSemanaVc, 'weeks').format('DD/MM/YYYY')
             return previsaoVe
         }
     }
 
     previsaoDiario(previsaoEstudante, qtd_cota_onibus_diaria, qtd_cota_trilho_diaria, cotaOnibusDiario, cotaTrilhoDiario) {
-        if(cotaOnibusDiario <= 0 || qtd_cota_onibus_diaria <= 0){
+        if (cotaOnibusDiario <= 0 || qtd_cota_onibus_diaria <= 0) {
             duracaoSemanaOnibusDiario = 0
         } else {
             duracaoSemanaOnibusDiario = qtd_cota_onibus_diaria / cotaOnibusDiario
         }
 
-        if(cotaTrilhoDiario <= 0 || qtd_cota_trilho_diaria <= 0){
+        if (cotaTrilhoDiario <= 0 || qtd_cota_trilho_diaria <= 0) {
             duracaoSemanaTrilhoDiario = 0
         } else {
             duracaoSemanaTrilhoDiario = qtd_cota_trilho_diaria / cotaTrilhoDiario
         }
 
         if (duracaoSemanaOnibusDiario != null || undefined) {
-            var previsaoDiarioOnibus = moment(previsaoEstudante, 'DD-MM-YYYY').add(duracaoSemanaOnibusDiario, 'weeks').format('DD/MM/YYYY')
-            var previsaoDiarioTrilho = moment(previsaoEstudante, 'DD-MM-YYYY').add(duracaoSemanaTrilhoDiario, 'weeks').format('DD/MM/YYYY')
+            let previsaoDiarioOnibus = moment(previsaoEstudante, 'DD-MM-YYYY').add(duracaoSemanaOnibusDiario, 'weeks').format('DD/MM/YYYY')
+            let previsaoDiarioTrilho = moment(previsaoEstudante, 'DD-MM-YYYY').add(duracaoSemanaTrilhoDiario, 'weeks').format('DD/MM/YYYY')
             return {
                 onibus: previsaoDiarioOnibus,
                 trilho: previsaoDiarioTrilho
             }
-
         } else {
-            var previsaoDiario = previsaoEstudante
+            let previsaoDiario = previsaoEstudante
             return previsaoDiario
         }
     }
 
-
 }
-
 
 module.exports = PrevisaoController;

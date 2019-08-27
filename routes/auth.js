@@ -15,8 +15,6 @@ module.exports = function (app) {
 	//Login padrão
 	app.post('/auth', function (req, res) {
 		let values = {};
-
-
 		let usuario = usuarioController.getUser(req.body.email, req.body.senha, BilheteUnico, Rotina, DetalhesRotina)
 			.then(function (response) {
 
@@ -31,29 +29,16 @@ module.exports = function (app) {
 
 						let rotinas = response.usuario.rotina
 
-
-
-
 						for (let i = 0; i < rotinas.length; i++) {
 							idsRotinas.push(rotinas[i].dataValues.id)
-
 						}
 
 						if (idsRotinas.length <= 0) {
 							res.json(response)
 						} else {
 
-
-
-
-							// if(idsRotinas.length <= 0){
-							// 	res.json({teste: 'teste'})
-							// }
-
-
 							let call = usuarioController.getDias(idsRotinas)
 								.then(function (aqui) {
-
 
 									let diasPosicao = aqui.response
 									let rotinaJson = response.usuario.rotina
@@ -77,30 +62,20 @@ module.exports = function (app) {
 
 									let usuarioJson = response
 
-
 									delete usuarioJson['error']
 									delete usuarioJson['usuario']['bilhete_unico']
 									delete usuarioJson['usuario']['rotina']
 
-									let rotinaNaoAguentoMais = { 'bilhete_unico': ArrayBilhetes, 'rotinas': ArrayRotinas };
-
 									usuarioJson.usuario.bilhete_unico = ArrayBilhetes
 									usuarioJson.usuario.rotina = ArrayRotinas
 
-									// let usuarioAcabaPorFavor = 
-									// usuarioAcabaPorFavor.error = false
-									// console.log(usuarioAcabaPorFavor)
-
 									res.json(usuarioJson)
-
 
 								});
 						}
 					}
 				}
-
 			});
-
 	});
 
 	// Facebook Login
@@ -126,23 +101,16 @@ module.exports = function (app) {
 
 						if (response.usuario) {
 							let id = response.usuario.id;
-
 							response.token = jwt.encode({ id }, config.jwtSecret);
 						}
 
 						let idsRotinas = []
-
 						let rotinas = response.usuario.rotina
 
 						for (let i = 0; i < rotinas.length; i++) {
 							idsRotinas.push(rotinas[i].dataValues.id)
 
 						}
-
-
-						// if(idsRotinas.length <= 0){
-						// 	res.json({teste: 'teste'})
-						// }
 
 						if (idsRotinas.length <= 0) {
 							res.json(response)
@@ -161,7 +129,6 @@ module.exports = function (app) {
 										rotinaJson[n]
 										ultimaRotina = Object.assign({}, rotinaJson[n].dataValues, diasPosicao[n])
 										ArrayRotinas.push(ultimaRotina)
-
 									}
 
 									let BilheteJson = response.usuario.bilhete_unico
@@ -172,23 +139,14 @@ module.exports = function (app) {
 									}
 
 									let usuarioJson = response
-
-
 									delete usuarioJson['error']
 									delete usuarioJson['usuario']['bilhete_unico']
 									delete usuarioJson['usuario']['rotina']
 
-									let rotinaNaoAguentoMais = { 'bilhete_unico': ArrayBilhetes, 'rotinas': ArrayRotinas };
-
 									usuarioJson.usuario.bilhete_unico = ArrayBilhetes
 									usuarioJson.usuario.rotina = ArrayRotinas
 
-									// let usuarioAcabaPorFavor = 
-									// usuarioAcabaPorFavor.error = false
-									// console.log(usuarioAcabaPorFavor)
-
 									res.json(usuarioJson)
-
 
 								});
 
@@ -202,46 +160,43 @@ module.exports = function (app) {
 
 	app.post('/getUser', function (req, res) {
 
-			let idsRotinas = req.body
-			let routesAll = [];
-			let diasSemana =
-				['domingo',
-					'segunda',
-					'terca',
-					'quarta',
-					'quinta',
-					'sexta',
-					'sabado'];
+		let idsRotinas = req.body
+		let routesAll = [];
+		let diasSemana =
+			['domingo',
+				'segunda',
+				'terca',
+				'quarta',
+				'quinta',
+				'sexta',
+				'sabado'];
 
+		for (let a = 0; a < idsRotinas.length; a++) {
+			let rotinaIds = {}
 
-			for (let a = 0; a < idsRotinas.length; a++) {
-				let rotinaIds = {}
+			DetalhesRotina.findAll({ where: { id_rotina: idsRotinas[a] } })
+				.then(function (dias) {
+					if (!dias) {
 
-				DetalhesRotina.findAll({ where: { id_rotina: idsRotinas[a] } })
-					.then(function (dias) {
-						if (!dias) {
+					} else {
+						for (let l = 0; l < dias.length; l++) {
+							// rotinaIds[diasSemana[l]] = dias[l].dataValues.weekday
+							if (dias[l].dataValues.weekday != 0) {
+								rotinaIds[diasSemana[l]] = true
 
-						} else {
-							for (let l = 0; l < dias.length; l++) {
-								// rotinaIds[diasSemana[l]] = dias[l].dataValues.weekday
-								if (dias[l].dataValues.weekday != 0) {
-									rotinaIds[diasSemana[l]] = true
-
-								} else {
-									rotinaIds[diasSemana[l]] = false
-								}
+							} else {
+								rotinaIds[diasSemana[l]] = false
 							}
-							routesAll.push(rotinaIds)
 						}
-						if (routesAll.length == idsRotinas.length) {
-							res.json(routesAll)
+						routesAll.push(rotinaIds)
+					}
+					if (routesAll.length == idsRotinas.length) {
+						res.json(routesAll)
 
-						}
-
-					})
-
-			}
-		});
+					}
+				})
+		}
+	});
 
 
 	// Google Login
@@ -268,7 +223,6 @@ module.exports = function (app) {
 
 						if (response.usuario) {
 							let id = response.usuario.id;
-
 							response.token = jwt.encode({ id }, config.jwtSecret);
 						}
 
@@ -280,11 +234,6 @@ module.exports = function (app) {
 							idsRotinas.push(rotinas[i].dataValues.id)
 
 						}
-
-
-						// if(idsRotinas.length <= 0){
-						// 	res.json({teste: 'teste'})
-						// }
 
 						if (idsRotinas.length <= 0) {
 							res.json(response)
@@ -303,7 +252,6 @@ module.exports = function (app) {
 										rotinaJson[n]
 										ultimaRotina = Object.assign({}, rotinaJson[n].dataValues, diasPosicao[n])
 										ArrayRotinas.push(ultimaRotina)
-
 									}
 
 									let BilheteJson = response.usuario.bilhete_unico
@@ -314,31 +262,18 @@ module.exports = function (app) {
 									}
 
 									let usuarioJson = response
-
-
 									delete usuarioJson['error']
 									delete usuarioJson['usuario']['bilhete_unico']
 									delete usuarioJson['usuario']['rotina']
-
-									let rotinaNaoAguentoMais = { 'bilhete_unico': ArrayBilhetes, 'rotinas': ArrayRotinas };
-
 									usuarioJson.usuario.bilhete_unico = ArrayBilhetes
 									usuarioJson.usuario.rotina = ArrayRotinas
-
-									// let usuarioAcabaPorFavor = 
-									// usuarioAcabaPorFavor.error = false
-									// console.log(usuarioAcabaPorFavor)
-
 									res.json(usuarioJson)
 
-
 								});
-
 						}
 					}
 				}
-
 			});
-		
+
 	});
 }

@@ -43,15 +43,13 @@ class BilheteController{
 
 		if(bilhete.saldo_comum == 'null'){
 			bilhete.saldo_comum = null
-			console.log(bilhete.saldo_comum)
-
 		}
+
 		if(bilhete.saldo_estudante == 'null'){
 			bilhete.saldo_estudante = null
 		}
 		if(bilhete.saldo_vt == 'null'){
 			bilhete.saldo_vt = null
-			console.log(bilhete.saldo_vt)
 		}
 
 		if(bilhete.cota_onibus == 'null'){

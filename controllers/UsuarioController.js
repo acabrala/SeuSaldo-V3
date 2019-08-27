@@ -62,7 +62,6 @@ class UsuarioController {
 	}
 
 	update(userID, usuario) {
-		console.log('UPDATE USUARIO ', usuario)
 		return this.Usuario.update(usuario, {
 			where: { id: userID }
 		}).then(function (usuario) {
@@ -78,7 +77,6 @@ class UsuarioController {
 		let _this = this;
 
 		let idAuthUser = authUser.id;
-		console.log(authUser);
 
 		return this.Usuario.findOne({ where: { id: idAuthUser } })
 			.then(function (usuario) {
@@ -97,9 +95,7 @@ class UsuarioController {
 							if (_this.hasRotina(usuario)) {
 
 								const rotinas = _this.getRotina(usuario);
-
 								const bilhete = _this.getBilheteUnico(usuario);
-
 								const usuarioFinal = _this.normalizeUser(usuario, bilhete, rotinas);
 
 								var response = {
@@ -113,7 +109,6 @@ class UsuarioController {
 						} else {
 							// Não tem bilhete unico
 							const usuarioFinal = _this.normalizeUser(usuario, null, null);
-
 							var response = {
 								error: false,
 								usuario: usuarioFinal
@@ -141,8 +136,8 @@ class UsuarioController {
 						}).catch(function (err) {
 
 
-								return _usuario
-								.findOne({ where: { email: authUser.email }})
+							return _usuario
+								.findOne({ where: { email: authUser.email } })
 								.then(function (usuario) {
 
 
@@ -218,36 +213,27 @@ class UsuarioController {
 						where: { id: usuario.id }
 					}).then(function (usuario) {
 
-
-						let promise = new Promise( (resolve, reject) => resolve(usuario));
-
-						
-						
+						let promise = new Promise((resolve, reject) => resolve(usuario));
 
 						// Tem bilhete unico
 						if (_this.hasBilheteUnico(usuario)) {
 							if (_this.hasRotina(usuario)) {
 
-
 								return promise.then(usuario => {
+									const rotinas = _this.getRotina(usuario);
+									const bilhete = _this.getBilheteUnico(usuario);
+									const usuarioFinal = _this.normalizeUser(usuario, bilhete, rotinas);
 
-								const rotinas = _this.getRotina(usuario);
+									var response = {
+										error: false,
+										usuario: usuarioFinal
+									};
 
-									
-								const bilhete = _this.getBilheteUnico(usuario);
-
-								const usuarioFinal = _this.normalizeUser(usuario, bilhete, rotinas);
-
-								var response = {
-									error: false,
-									usuario: usuarioFinal
-								};
-
-								return response;
-							})
+									return response;
+								})
 							} else {
 								const bilhete = _this.getBilheteUnico(usuario);
-								const usuarioFinal = _this.normalizeUser(usuario,bilhete, null )
+								const usuarioFinal = _this.normalizeUser(usuario, bilhete, null)
 
 								var response = {
 									error: false,
@@ -258,7 +244,7 @@ class UsuarioController {
 								return response;
 
 							}
-						
+
 						} else {
 							// NÃ£o tem bilhete unico
 							const usuarioFinal = _this.normalizeUser(usuario, null, null);
@@ -271,7 +257,7 @@ class UsuarioController {
 
 							return response;
 						}
-					
+
 					}).catch(function (err) {
 						return errorResponse(err.message);
 					});
@@ -284,7 +270,7 @@ class UsuarioController {
 			});
 	}
 	getRotinaId(rotinas, DetalhesRotina) {
-	
+
 		for (let k = 0; k < rotinas.length; k++) {
 			let rotinaIds = {}
 			rotinaIds.id = rotinas[k].dataValues.id
@@ -302,71 +288,54 @@ class UsuarioController {
 		}
 	}
 
-	getDias(IdsRotinas){
+	getDias(IdsRotinas) {
 
-		console.log(('getdias'));
-		console.log(IdsRotinas)
+		let uri = "http://www.zazzi.com.br:5000/getUser"
 
-			var headers = {
+		return axios.post(uri, IdsRotinas, {
+			headers: {
 				'Content-Type': 'application/json'
-			};
-	
-			var rejectUnauthorized = false
-	
-			let uri = "http://www.zazzi.com.br:5000/getUser"
+			}
+		}).then(function (response) {
 
-	
-			return axios.post(uri, IdsRotinas, {
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			}).then(function (response) {
-							console.log(uri)
+			return {
+				error: false,
+				response: response.data
+			}
+		}).catch(function (error) {
+		});
+	}
 
-				console.log(response)				
-	
-				// return retorno;
-				return {
-					error: false,
-					response: response.data
-				}
-			}).catch(function (error) {
-				console.log(error)
-			});
-		}
-	
 
-	diasRotina(rotinas, DetalhesRotina){
+	diasRotina(rotinas, DetalhesRotina) {
 		let routesAll = []
 		let diasSemana = ['domingo',
-		'segunda',
-		'terca',
-		'quarta',
-		'quinta',
-		'sexta',
-		'sabado'];
-		
+			'segunda',
+			'terca',
+			'quarta',
+			'quinta',
+			'sexta',
+			'sabado'];
+
 		let rotinaIds = {}
 
-		for(let k = 0; k < rotinas.length; k++){
+		for (let k = 0; k < rotinas.length; k++) {
 			rotinaIds.id = rotinas[k].dataValues.id
-			DetalhesRotina.findAll({where: { id_rotina: rotinas[k].dataValues.id}})
-			.then(function(dias){
-				if (!dias){
+			DetalhesRotina.findAll({ where: { id_rotina: rotinas[k].dataValues.id } })
+				.then(function (dias) {
+					if (!dias) {
 
-				} else{ 
-					for (let l = 0; l < dias.length; l++) {
+					} else {
+						for (let l = 0; l < dias.length; l++) {
 
-						rotinaIds[diasSemana[l]] = dias[l].dataValues.weekday
-						
+							rotinaIds[diasSemana[l]] = dias[l].dataValues.weekday
+
+						}
+						routesAll.push(rotinaIds)
+
 					}
-					routesAll.push(rotinaIds)
-					
-				}
-
-			})
+				})
 		}
-		console.log('asada')
 
 	}
 
@@ -394,9 +363,9 @@ class UsuarioController {
 
 	getRotina(usuario) {
 		return usuario.dataValues.Rotinas
-	
+
 	}
-	
+
 
 	normalizeUser(usuario, bilhete, rotina) {
 		delete usuario.dataValues.BilheteUnicos;
@@ -404,8 +373,6 @@ class UsuarioController {
 		delete usuario.dataValues.is_facebook;
 		delete usuario.dataValues.is_google;
 		delete usuario.dataValues.Rotinas;
-
-		//delete usuario.dataValues.id_rotina;
 
 		if (bilhete) {
 			usuario.dataValues.bilhete_unico = bilhete;
@@ -459,10 +426,9 @@ class UsuarioController {
 
 		return this.Usuario.findOne({ where: { email } })
 			.then(function (usuario) {
-				console.log(usuario)
-				if (usuario) {                   // generate code
+				if (usuario) {     
+					              // generate code
 					let code = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
-
 					usuario = usuario.dataValues;
 					usuario.code = code;
 
@@ -470,23 +436,22 @@ class UsuarioController {
 						code: code
 					};
 					let nome = usuario.nome
-					// console.log(util.inspect(usuario, false, null));
 
 					return _usuario.update(codigo, {
 						where: { id: usuario.id }
 
 					}).then(function (usuario) {
 
-					
+
 						return sender.send(email, code, nome)
 							.then(function (info) {
 								return successResponse('O código de recuperação de senha foi enviado para o seu email')
 							}).catch(function (err) {
-								
+
 								return errorResponse(err.message);
 							});
-				
-					
+
+
 
 					}).catch(function (err) {
 						return errorResponse(err.message);
@@ -495,12 +460,9 @@ class UsuarioController {
 					return errorResponse("Usuário não encontrado.");
 				}
 			}).catch(function (err) {
-				console.log(err)
 				return errorResponse(err.message);
 			});
 	}
-
-
 
 	verifyUserCode(email, code) {
 		const resetPasswordToken = require('crypto').randomBytes(32).toString('hex');
@@ -511,17 +473,15 @@ class UsuarioController {
 			.then(function (usuario) {
 				if (usuario) {
 
-					console.log(usuario.code + ":" + code)
 					// verifica se os códigos são iguais
 					if (usuario.code === code) {
 						// atualizar token
-
 						usuario = usuario.dataValues;
 						let nomeUser = usuario.nome
 						usuario.password_reset_token = resetPasswordToken;
 
 						let token = {
-							password_reset_token : resetPasswordToken
+							password_reset_token: resetPasswordToken
 						}
 						return _usuario.update(token, {
 							where: { id: usuario.id }
@@ -553,17 +513,12 @@ class UsuarioController {
 
 		let _usuario = this.Usuario;
 
-		console.log(email)
 		return this.Usuario.findOne({ where: { email } })
 			.then(function (usuario) {
 				if (usuario) {
-					console.log(usuario.password_reset_token)
 
 					// verifica se os códigos são iguais
 					if (usuario.password_reset_token === passwordToken) {
-						console.log('ESDFFSDFSDFDSFSD');
-
-						console.log('ERSDFFGDFG$#%$#' + usuario.password_reset_token);
 						// atualizar token
 						const salt = bcrypt.genSaltSync();
 

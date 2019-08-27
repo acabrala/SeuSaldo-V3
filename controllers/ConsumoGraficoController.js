@@ -81,8 +81,6 @@ class ConsumoGraficoController {
             where: Sequelize.literal(`BilheteUnico.id = '${bilheteID}' And Rotinas.rotina_desativada = 0`)
         }).then(function (informacoes) {
 
-            console.log(informacoes)
-
             let saldoComum = informacoes[0].dataValues.saldo_comum
             let saldoVT = informacoes[0].dataValues.saldo_vt
             let saldoEstudante = informacoes[0].dataValues.saldo_estudante
@@ -90,7 +88,6 @@ class ConsumoGraficoController {
 
 
             for (let i = 0; i < rotinas.length; i++) {
-                console.log(i)
                 for (let m = 0; m < 7; m++) {
                     let valor
 
@@ -226,7 +223,6 @@ class ConsumoGraficoController {
                 id_bilhete: bilheteID,
                 id_usuario: userID
             };
-            console.log(payload)
 
             return _this.Consumo.find({
                 where: {
@@ -334,10 +330,7 @@ class ConsumoGraficoController {
                         error: false
                     };
 
-                    console.log(response)
-
                     return response
-
 
                 } else {
 
@@ -390,7 +383,6 @@ class ConsumoGraficoController {
 
 
         }).catch(function (err) {
-            console.log(err);
             return {
                 error: true,
                 message: "Tente novamente mais tarde"
@@ -400,7 +392,5 @@ class ConsumoGraficoController {
 
     }
 }
-
-
 
 module.exports = ConsumoGraficoController;
