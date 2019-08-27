@@ -1,7 +1,7 @@
 const crypto = require('crypto').randomBytes(256).toString('hex');
 
 module.exports = {
-	database: 'seusaldo_v2',
+	database: 'seusaldo_dev',
 	username: 'root',
 	password: 'MKTz@zz1',
 	pool: {

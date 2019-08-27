@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 const moment = require('moment');
 
 module.exports = function(sequelize, DataTypes){
@@ -45,6 +45,8 @@ module.exports = function(sequelize, DataTypes){
 			}
 		},
 		telefone: DataTypes.STRING,
+		estado: DataTypes.STRING,
+		cidade: DataTypes.STRING,
 		data_nascimento: DataTypes.STRING,
 		is_facebook: {
 			type: DataTypes.BOOLEAN,

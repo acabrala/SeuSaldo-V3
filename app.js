@@ -19,7 +19,8 @@ const previsaoRouter = require('./routes/previsao');
 const localizacaoRouter = require('./routes/localizacao')
 const viagemExtraRouter = require('./routes/viagemExtra');
 const logsSaldoRouter = require('./routes/logs_saldo');
-const consumoGraficoRouter = require('./routes/consumoGrafico')
+const consumoGraficoRouter = require('./routes/consumoGrafico');
+const interesseRouter = require('./routes/interesse');
 
 
 const app = express();
@@ -51,6 +52,7 @@ localizacaoRouter(app)
 viagemExtraRouter(app);
 logsSaldoRouter(app)
 consumoGraficoRouter(app)
+interesseRouter(app)
 
 
 module.exports = app;
