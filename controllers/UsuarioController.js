@@ -182,10 +182,7 @@ class UsuarioController {
 										return errorResponse(err.message);
 
 									})
-
-
 								})
-
 						});
 				}
 			}).catch(function (err) {
@@ -248,8 +245,6 @@ class UsuarioController {
 						} else {
 							// NÃ£o tem bilhete unico
 							const usuarioFinal = _this.normalizeUser(usuario, null, null);
-
-
 							var response = {
 								error: false,
 								usuario: usuarioFinal
@@ -332,11 +327,9 @@ class UsuarioController {
 
 						}
 						routesAll.push(rotinaIds)
-
 					}
 				})
 		}
-
 	}
 
 	hasBilheteUnico(usuario) {
@@ -346,8 +339,6 @@ class UsuarioController {
 			return false;
 		}
 	}
-
-
 
 	getBilheteUnico(usuario) {
 		return usuario.dataValues.BilheteUnicos;
@@ -426,8 +417,8 @@ class UsuarioController {
 
 		return this.Usuario.findOne({ where: { email } })
 			.then(function (usuario) {
-				if (usuario) {     
-					              // generate code
+				if (usuario) {
+					// generate code
 					let code = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
 					usuario = usuario.dataValues;
 					usuario.code = code;
@@ -442,7 +433,6 @@ class UsuarioController {
 
 					}).then(function (usuario) {
 
-
 						return sender.send(email, code, nome)
 							.then(function (info) {
 								return successResponse('O código de recuperação de senha foi enviado para o seu email')
@@ -450,9 +440,6 @@ class UsuarioController {
 
 								return errorResponse(err.message);
 							});
-
-
-
 					}).catch(function (err) {
 						return errorResponse(err.message);
 					});
