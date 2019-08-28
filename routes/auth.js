@@ -241,7 +241,6 @@ module.exports = function (app) {
 							let call = usuarioController.getDias(idsRotinas)
 								.then(function (aqui) {
 
-
 									let diasPosicao = aqui.response
 									let rotinaJson = response.usuario.rotina
 									let ultimaRotina = {}

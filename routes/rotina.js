@@ -14,10 +14,9 @@ module.exports = function (app) {
 	// Deletar rotina
 	app.delete('/usuarios/:user_id/rotinas/:rotina_id', function (req, res) {
 
-		var userID = req.params.user_id;
-		var rotinaID = req.params.rotina_id;
+		let userID = req.params.user_id;
+		let rotinaID = req.params.rotina_id;
 
-		console.log(rotinaID)
 
 		rotinaController.delete(userID, rotinaID, req.body)
 			.then(function (response) {
@@ -75,7 +74,7 @@ module.exports = function (app) {
 	// Atualizar rotina
 	app.patch('/usuarios/:user_id/rotinas', function (req, res) {
 
-		var userID = req.params.user_id;
+		let userID = req.params.user_id;
 
 		let diasWeekday = {
 			domingo: req.body.domingo,
@@ -98,7 +97,7 @@ module.exports = function (app) {
 	app.get('/teste/:usuario_id', function (req, res) {
 
 
-		var userID = req.params.usuario_id;
+		let userID = req.params.usuario_id;
 		rotinaController.previsao(userID, BilheteUnico)
 			.then(function (response) {
 				res.json(response);

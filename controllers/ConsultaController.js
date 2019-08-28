@@ -23,7 +23,7 @@ class ConsultaController{
 	create(consulta){
 		return this.Consulta.create(consulta)
 			.then(function(consulta){
-				var response = {
+				let response = {
 					error: false,
 					message: "Consulta realizada com sucesso!"
 				};

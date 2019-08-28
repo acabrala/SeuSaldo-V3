@@ -23,7 +23,7 @@ class LogsSaldoController {
 	create(logs) {
 		return this.Logs.create(logs)
 			.then(function (logs) {
-				var response = {
+				let response = {
 					error: false,
 					message: "Operação realizado com sucesso!"
 				}

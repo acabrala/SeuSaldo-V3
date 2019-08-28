@@ -6,7 +6,7 @@ module.exports = function(app){
 
 	// Criar novo bilhete
 	app.post('/usuarios/:user_id/mobiles', function(req, res, next){
-		var userID = req.params.user_id;
+		let userID = req.params.user_id;
 
 		req.body.id_usuario = userID;
 

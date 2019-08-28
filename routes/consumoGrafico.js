@@ -15,7 +15,6 @@ module.exports = function (app) {
         let bilheteID = req.params.id_bilhete;
         let flagBilheteUnico = parseInt(req.params.flag_bilhete_unico);
         
-
         consumoGraficoController.getConsumo(userID, bilheteID, DetalhesRotina, Rotina, flagBilheteUnico, BilheteUnico)
         .then(function(grafico){
 

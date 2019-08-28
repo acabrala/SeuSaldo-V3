@@ -144,7 +144,7 @@ class ConsumoGraficoController {
                 let diaTeste = parseInt(dataSplit[0])
                 let mesTeste = parseInt(dataSplit[1]) - 1
                 let anoTeste = parseInt(dataSplit[2])
-                var date = new Date(anoTeste, mesTeste, diaTeste)
+                let date = new Date(anoTeste, mesTeste, diaTeste)
 
                 switch (date.getDay()) {
                     case 0:

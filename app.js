@@ -22,7 +22,6 @@ const logsSaldoRouter = require('./routes/logs_saldo');
 const consumoGraficoRouter = require('./routes/consumoGrafico');
 const interesseRouter = require('./routes/interesse');
 
-
 const app = express();
 app.config = config;
 app.configFacebookAuth = facebookConfig;
@@ -31,7 +30,7 @@ app.datasource = datasource(app);
 
 app.set('port', 5000);
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const auth = authorization(app);
@@ -53,6 +52,5 @@ viagemExtraRouter(app);
 logsSaldoRouter(app)
 consumoGraficoRouter(app)
 interesseRouter(app)
-
 
 module.exports = app;

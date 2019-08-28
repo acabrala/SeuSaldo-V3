@@ -1,13 +1,11 @@
 const ViagemExtraController = require('../controllers/ViagemExtraController');
 
 
-module.exports = function(app){
+module.exports = function (app) {
 
 	const viagemExtraController = new ViagemExtraController(app.datasource.models.BilheteUnico);
 
-
-
-	app.post('/ve/:usuario_id/:bilhete_id', function(req,res){
+	app.post('/ve/:usuario_id/:bilhete_id', function (req, res) {
 
 		let userID = req.params.usuario_id;
 		let bilheteID = req.params.bilhete_id;
@@ -18,10 +16,8 @@ module.exports = function(app){
 		let valorNegativo = req.body.valorNegativo;
 
 		viagemExtraController.viagemExtra(userID, bilheteID, desconto, quantidadeOnibus, quantidadeTrilho, quantidadeIntegracao, valorNegativo)
-		.then(function(response){
-			//console.log(response)
-			res.json(response)
-		});
-
+			.then(function (response) {
+				res.json(response)
+			});
 	});
 }

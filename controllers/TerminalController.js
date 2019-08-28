@@ -12,15 +12,12 @@ const errorResponse = function (message) {
   }
 }
 
-
-
 class TerminalController {
 
   callProcess(envio) {
 
-
     let path = "java -jar /home/admin_/redepontocerto.jar " + JSON.stringify(envio);
-    var execSync = require('child_process').execSync, child;
+    let execSync = require('child_process').execSync, child;
     child = execSync(path);
 
     if (!child) {
@@ -46,11 +43,11 @@ class TerminalController {
 
   callRPC(juncao) {
 
-    var headers = {
+    let headers = {
       'Content-Type': 'application/json'
     };
 
-    var rejectUnauthorized = false;
+    let rejectUnauthorized = false;
     let uri = "https://integracao.redepontocerto.com.br:8473/mobile-server-integracao-3.0/inicializar"
 
     return axios.post(uri, juncao, {
@@ -59,8 +56,8 @@ class TerminalController {
       }
     }).then(function (response) {
 
-      var retorno = response.data.token
-      var terminal = response.data.codigoTerminal
+      let retorno = response.data.token
+      let terminal = response.data.codigoTerminal
 
       return {
         error: false,
@@ -73,9 +70,9 @@ class TerminalController {
 
   callRpcCartao(token, numeroCartao, numeroTerminal) {
 
-    var bilhete = { 'numeroCartao': numeroCartao }
+    let bilhete = { 'numeroCartao': numeroCartao }
     let teste = { 'numeroTerminal': parseFloat(numeroTerminal) }
-    var dados = {
+    let dados = {
       'numeroCartao': numeroCartao,
       'idTerminal': parseInt(numeroTerminal)
     }
@@ -87,7 +84,7 @@ class TerminalController {
         'token': token
       }
     }).then(function (response) {
-      var chave = response.data.chave;
+      let chave = response.data.chave;
       return {
         error: false,
         chave: chave
@@ -98,6 +95,94 @@ class TerminalController {
         message: 'Ocorreu algum erro' + error
       }
     })
+  }
+
+  callRpcVem(token, numeroCartao, numeroTerminal) {
+    let saldoComum = 0.00;
+    let saldoEstudadnte = 0.00;
+
+    let uri = `https://integracao.redepontocerto.com.br:8473/mobile-server-integracao-5.0/saldo/consulta/vem/${numeroCartao}`
+    return axios.get(uri,
+      {
+        headers: {
+          'token': token
+        }
+      }).then((result) => {
+        let resultado = result.data.data.listaTiposCredito
+        if (resultado.hasOwnProperty('900')) {
+          saldoEstudadnte = resultado['900'].saldoCartao
+
+          return {
+            error: false,
+            saldo_estudante: saldoEstudadnte,
+            recarga_disponivel: resultado['900'].recargaDisponivel,
+            estudante: true
+          }
+
+        }
+        if (resultado.hasOwnProperty('500')) {
+          saldoComum = resultado['500'].saldoCartao
+          return {
+            error: false,
+            saldo_comum: saldoComum,
+            recarga_disponivel: resultado['500'].recargaDisponivel,
+            estudante: false
+          }
+
+        }
+      }).catch((err) => {
+        return {
+          error: true,
+          status: err.response.status,
+          message: err.response.statusText
+        }
+      })
+  }
+
+
+  callRpcBem(token, numeroCartao, numeroTerminal) {
+    let saldoComum = 0.00;
+    let saldoEstudadnte = 0.00;
+
+    let uri = `https://integracao.redepontocerto.com.br:8473/mobile-server-integracao-5.0/saldo/consulta/bem/${numeroCartao}`
+    return axios.get(uri,
+      {
+        headers: {
+          'token': token
+        }
+      }).then((result) => {
+        let resultado = result.data.data.listaTiposCredito
+        if (resultado.hasOwnProperty('900')) {
+          saldoEstudadnte = resultado['900'].saldoCartao
+          saldoComum = resultado['500'].saldoCartao
+
+          let response = {
+            escolar: {
+              saldo_estudante: saldoEstudadnte,
+              recarga_disponivel: resultado['900'].recargaDisponivel,
+              estudante: true
+            },
+            cidadao: {
+              saldo_comum: saldoComum,
+              recargaDisponivel: resultado['500'].recargaDisponivel
+            }
+          }
+          return response
+        }
+        if (resultado.hasOwnProperty('500')) {
+          saldoComum = resultado['500'].saldoCartao
+          return {
+            saldo_comum: saldoComum,
+            recarga_disponivel: resultado['500'].recargaDisponivel
+          }
+        }
+      }).catch((err) => {
+        return {
+          error: true,
+          status: err.response.status,
+          message: err.response.statusText
+        }
+      })
   }
 
   callRpcCarteiras(token, numeroCartao, numeroTerminal) {
@@ -123,8 +208,7 @@ class TerminalController {
       }
     }).then(function (response) {
 
-
-      var produtos = response.data.produtos
+      let produtos = response.data.produtos
 
       if (produtos.length == 1) {
 

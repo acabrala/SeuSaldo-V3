@@ -26,7 +26,7 @@ class BilheteController{
 			.then(function(bilhete){
 
 
-				var response = {
+				let response = {
 					error: false,
 					message: "Bilhete cadastrado com sucesso!",
 					id: bilhete.dataValues

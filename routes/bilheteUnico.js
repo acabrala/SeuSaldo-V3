@@ -19,9 +19,7 @@ module.exports = function (app) {
 	app.patch('/usuarios/:user_id/bilhetes/:bilhete_id', function (req, res) {
 		let userID = req.params.user_id;
 		let bilheteID = req.params.bilhete_id;
-		console.log('*********************')
-		console.log(req.body)
-
+		
 		bilheteController
 			.update(userID, bilheteID, req.body)
 			.then(function (response) {

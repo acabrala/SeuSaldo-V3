@@ -98,7 +98,7 @@ class UsuarioController {
 								const bilhete = _this.getBilheteUnico(usuario);
 								const usuarioFinal = _this.normalizeUser(usuario, bilhete, rotinas);
 
-								var response = {
+								let response = {
 									error: false,
 									usuario: usuarioFinal
 								};
@@ -109,7 +109,7 @@ class UsuarioController {
 						} else {
 							// Não tem bilhete unico
 							const usuarioFinal = _this.normalizeUser(usuario, null, null);
-							var response = {
+							let response = {
 								error: false,
 								usuario: usuarioFinal
 							};
@@ -127,7 +127,7 @@ class UsuarioController {
 							delete usuario.dataValues.is_facebook;
 							delete usuario.dataValues.is_google;
 
-							var response = {
+							let response = {
 								error: false,
 								usuario: usuario.dataValues
 							};
@@ -135,12 +135,9 @@ class UsuarioController {
 							return response;
 						}).catch(function (err) {
 
-
 							return _usuario
 								.findOne({ where: { email: authUser.email } })
 								.then(function (usuario) {
-
-
 
 									return _usuario.find({
 										include: [
@@ -159,7 +156,7 @@ class UsuarioController {
 
 												const usuarioFinal = _this.normalizeUser(usuario, bilhete, rotinas);
 
-												var response = {
+												let response = {
 													error: false,
 													usuario: usuarioFinal
 												};
@@ -171,7 +168,7 @@ class UsuarioController {
 											// Não tem bilhete unico
 											const usuarioFinal = _this.normalizeUser(usuario, null, null);
 
-											var response = {
+											let response = {
 												error: false,
 												usuario: usuarioFinal
 											};
@@ -221,7 +218,7 @@ class UsuarioController {
 									const bilhete = _this.getBilheteUnico(usuario);
 									const usuarioFinal = _this.normalizeUser(usuario, bilhete, rotinas);
 
-									var response = {
+									let response = {
 										error: false,
 										usuario: usuarioFinal
 									};
@@ -232,7 +229,7 @@ class UsuarioController {
 								const bilhete = _this.getBilheteUnico(usuario);
 								const usuarioFinal = _this.normalizeUser(usuario, bilhete, null)
 
-								var response = {
+								let response = {
 									error: false,
 									usuario: usuarioFinal,
 									rotina: rotinas
@@ -245,7 +242,7 @@ class UsuarioController {
 						} else {
 							// NÃ£o tem bilhete unico
 							const usuarioFinal = _this.normalizeUser(usuario, null, null);
-							var response = {
+							let response = {
 								error: false,
 								usuario: usuarioFinal
 							};
@@ -473,7 +470,7 @@ class UsuarioController {
 						return _usuario.update(token, {
 							where: { id: usuario.id }
 						}).then(function (usuario) {
-							var response = {
+							let response = {
 								error: false,
 								message: 'Código válido',
 								password_token: resetPasswordToken,

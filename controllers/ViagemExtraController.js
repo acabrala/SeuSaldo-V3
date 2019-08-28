@@ -21,7 +21,7 @@ class ViagemExtraController {
     }
 
     viagemExtra(UserID, BilheteID, valor, quantidadeOnibus, quantidadeTrilho, quantidadeIntegracao, valorNegativo) {
-        var response;
+        let response;
         let _this = this;
         let _viagemExtra = this.ViagemExtra;
 
@@ -56,10 +56,8 @@ class ViagemExtraController {
 
             }
 
-            console.log(typeof(saldoComum))
-
             if (flagBilheteUnico === true) {
-                var sp = principal(saldoVt, saldoVe, saldoComum, quantidadeOnibus, quantidadeTrilho, quantidadeIntegracao, ultimaCarteira, passeLivreOnibus, passeLivreTrilho, cotaDiariaOnibus, cotaDiariaTrilho);
+                let sp = principal(saldoVt, saldoVe, saldoComum, quantidadeOnibus, quantidadeTrilho, quantidadeIntegracao, ultimaCarteira, passeLivreOnibus, passeLivreTrilho, cotaDiariaOnibus, cotaDiariaTrilho);
                 if (sp.update === true) {
                     return _viagemExtra.update({ saldo_comum: sp.saldo_comum, saldo_vt: sp.saldo_vt, saldo_estudante: sp.saldo_ve, cota_onibus: sp.passe_livre_onibus, cota_trilho: sp.passe_livre_trilho, cota_diaria_onibus: sp.cota_onibus, cota_diaria_trilho: sp.cota_trilho }, {
                         where: { id: BilheteID }
@@ -99,9 +97,7 @@ class ViagemExtraController {
                 return sp
             } else {
 
-                var outros = comum(saldoComum, valor, valorNegativo);
-
-                console.log(outros)
+                let outros = comum(saldoComum, valor, valorNegativo);
                 let saldocomum = outros.saldo_comum
 
                 if (outros.update === true) {
@@ -132,21 +128,20 @@ class ViagemExtraController {
 }
 function principal(saldoVt, saldoVe, saldoComum, quantidadeOnibus, quantidadeTrilho, quantidadeIntegracao, ultimaCarteira, passeLivreOnibus, passeLivreTrilho, cotaDiariaOnibus, cotaDiariaTrilho) {
     
-    console.log(saldoVt)
     if (quantidadeOnibus < 0) {
-        var onibus = retirarSaldoOnibus(quantidadeOnibus, saldoVt, saldoVe, saldoComum, passeLivreOnibus, passeLivreTrilho, cotaDiariaOnibus, cotaDiariaTrilho)
+        let onibus = retirarSaldoOnibus(quantidadeOnibus, saldoVt, saldoVe, saldoComum, passeLivreOnibus, passeLivreTrilho, cotaDiariaOnibus, cotaDiariaTrilho)
     } else {
-        var onibus = adicionarSaldoOnibus(quantidadeOnibus, saldoVt, saldoVe, saldoComum, ultimaCarteira, passeLivreOnibus, passeLivreTrilho, cotaDiariaOnibus, cotaDiariaTrilho)
+        let onibus = adicionarSaldoOnibus(quantidadeOnibus, saldoVt, saldoVe, saldoComum, ultimaCarteira, passeLivreOnibus, passeLivreTrilho, cotaDiariaOnibus, cotaDiariaTrilho)
     }
     if (quantidadeTrilho < 0) {
-        var trilho = retirarSaldoTrilho(quantidadeTrilho, onibus.saldo_vt, onibus.saldo_ve, onibus.saldo_comum, onibus.passe_livre_onibus, onibus.passe_livre_trilho, onibus.diario_onibus, onibus.diario_trilho)
+        let trilho = retirarSaldoTrilho(quantidadeTrilho, onibus.saldo_vt, onibus.saldo_ve, onibus.saldo_comum, onibus.passe_livre_onibus, onibus.passe_livre_trilho, onibus.diario_onibus, onibus.diario_trilho)
     } else {
-        var trilho = adicionarSaldoTrilho(quantidadeTrilho, onibus.saldo_vt, onibus.saldo_ve, onibus.saldo_comum, ultimaCarteira, onibus.passe_livre_onibus, onibus.passe_livre_trilho, onibus.diario_onibus, onibus.diario_trilho)
+        let trilho = adicionarSaldoTrilho(quantidadeTrilho, onibus.saldo_vt, onibus.saldo_ve, onibus.saldo_comum, ultimaCarteira, onibus.passe_livre_onibus, onibus.passe_livre_trilho, onibus.diario_onibus, onibus.diario_trilho)
     }
     if (quantidadeIntegracao < 0) {
-        var integracao = retirarSaldoIntegracao(quantidadeIntegracao, trilho.saldo_vt, trilho.saldo_ve, trilho.saldo_comum, trilho.passe_livre_onibus, trilho.passe_livre_trilho, trilho.diario_onibus, trilho.diario_trilho)
+        let integracao = retirarSaldoIntegracao(quantidadeIntegracao, trilho.saldo_vt, trilho.saldo_ve, trilho.saldo_comum, trilho.passe_livre_onibus, trilho.passe_livre_trilho, trilho.diario_onibus, trilho.diario_trilho)
     } else {
-        var integracao = adicionarSaldoIntegracao(quantidadeIntegracao, trilho.saldo_vt, trilho.saldo_ve, trilho.saldo_comum, ultimaCarteira, trilho.passe_livre_onibus, trilho.passe_livre_trilho, trilho.diario_onibus, trilho.diario_trilho)
+        let integracao = adicionarSaldoIntegracao(quantidadeIntegracao, trilho.saldo_vt, trilho.saldo_ve, trilho.saldo_comum, ultimaCarteira, trilho.passe_livre_onibus, trilho.passe_livre_trilho, trilho.diario_onibus, trilho.diario_trilho)
     }
     
 
@@ -186,7 +181,6 @@ function retirarSaldoOnibus(quantidadeOnibus, saldo_vt, saldo_ve, saldo_comum, p
 
     } else {
 
-        console.log(quantidadeOnibus  + saldo_vt)
         for (i = quantidadeOnibus; i < 0; i++) {
             if (saldo_vt >= 4.00) {
                 saldo_vt -= 4
@@ -380,9 +374,6 @@ function adicionarSaldoOnibus(quantidadeOnibus, saldo_vt, saldo_ve, saldo_comum,
             } else if (ultimaCarteira == null){
             	saldo_comum += 4.00
             	update = true
-            	console.log('************')
-            	console.log(typeof(saldo_comum))
-
             }
                 
 
