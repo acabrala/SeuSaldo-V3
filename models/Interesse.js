@@ -9,7 +9,11 @@ module.exports = function(Sequelize, DataTypes){
         nome: DataTypes.STRING,
         latitude: DataTypes.STRING,
         longitude: DataTypes.STRING,
-        telefone:  DataTypes.STRING
+		telefone:  DataTypes.STRING,
+		cidade:DataTypes.STRING,
+		estado: DataTypes.STRING,
+		cidade_localizacao: DataTypes.STRING,
+		estado_localizacao: DataTypes.STRING,
 	},
 	{
 		freezeTableName: true,
@@ -17,10 +21,5 @@ module.exports = function(Sequelize, DataTypes){
 		tableName: 'interesse'
 	});
 
-	/*
-	BilheteUnico.associate = function(models){
-		BilheteUnico.hasOne(models.Usuario, {foreignKey: 'id_usuario'})
-	}
-	*/
 	return Interesse;
 };

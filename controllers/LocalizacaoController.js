@@ -36,7 +36,7 @@ class LocalizacaoController {
                 Cidade: cidade,
                 Estado: estado
             }
-        })
+        })  
     }
 }
 

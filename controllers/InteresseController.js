@@ -18,27 +18,36 @@ class InteresseController {
         this.Interesse = Interesse;
     }
 
-    create(interesse) {
+    async create(interesse) {
+        let array = {}
+        let cidade;
+        let estado;
 
+        if((interesse.latitude != null)&&(interesse.longitude != null)){
         let url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + interesse.latitude + "," + interesse.longitude + "&key=AIzaSyBLPU6jJlWuyz9u3mIvExfsJ95NZF7Gqlg";
-
-        return axios.get(url).then((result) => {
-            let cidade;
-            let estado;
+        
+        await axios.get(url).then((result) => {
             result.data.results[0].address_components.map((item) => {
                 item.types.filter((adm_area) => {
 
-                    if (adm_area == "administrative_area_level_2") {
-                        cidade = item.long_name
+                    if (adm_area === 'administrative_area_level_1') {
+                        array.estado = item.long_name
+                        interesse.estado_localizacao = item.long_name
                     }
-                    if (adm_area == "administrative_area_level_1") {
-                        estado = item.long_name
+            
+                    if (adm_area === 'administrative_area_level_2') {
+                        array.cidade = item.long_name
+                        interesse.cidade_localizacao = item.long_name
                     }
                 });
             })
-            return cidade
         })
 
+      this.Interesse.create(interesse)
+        
+        }else {
+            this.Interesse.create(interesse)
+        }
     }
 }
 

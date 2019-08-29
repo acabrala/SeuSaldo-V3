@@ -13,7 +13,6 @@ connection.query("SELECT valor_volta,hora_volta, domingo, segunda, terca, quarta
     "on consultai_dev.rotina.usuario_id = bilhete_unico.id_usuario " +
     "where rotina.id between 1 and 16500 and hora_volta is not null and id_tipoVolta is not null", function (error, results, fields) {
         if (error) throw error;
-        console.log(results.length)
 
         for (let j = 0; j < results.length; j++) {
 

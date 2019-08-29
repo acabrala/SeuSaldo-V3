@@ -27,16 +27,13 @@ app.config = config;
 app.configFacebookAuth = facebookConfig;
 app.configGoogleAuth = googleConfig;
 app.datasource = datasource(app);
-
-app.set('port', 5000);
-
+app.set('port', 3000);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const auth = authorization(app);
 app.use(auth.initialize());
 app.auth = auth;
-
 
 usuarioRouter(app);
 authRouter(app);

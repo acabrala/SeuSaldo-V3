@@ -1,6 +1,3 @@
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
-
 const errorResponse = function (message) {
 	return {
 		error: true,

@@ -19,11 +19,6 @@ module.exports = function(Sequelize, DataTypes){
 		timestamps: false,
 		tableName: 'log_rotina'
 	});
-
-	/*
-	BilheteUnico.associate = function(models){
-		BilheteUnico.hasOne(models.Usuario, {foreignKey: 'id_usuario'})
-	}
-	*/
+	
 	return LogRotina;
 };
