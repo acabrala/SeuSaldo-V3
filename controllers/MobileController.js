@@ -19,50 +19,37 @@ class MobileController {
 
 	async create(mobile) {
 
-		console.log(typeof(this.Mobile));
-		 
-		console.log("vai caraio");
-		
+		return await this.Mobile.findOne({ where: { serial: mobile.serial } })
+			.then(mobile_result => {
+				if (!mobile_result) {
+					console.log(mobile)
+					this.Mobile.create(mobile)
+						.then((result) => {
+							return {
+								error: false,
+								message: "Celular cadastrado com sucesso",
+								mobile: result,
+								versao_compativel: "3.0"
+							}
+						}).catch(error => {
+							return {
+								error: true,
+								message: "Erro ao gerar novo mobile. Erro:" + err
+							}
+						});
 
-		// return this.Mobile.findOne().then(result => {
-		// 	return result
-		// })
-		// await this.Mobile.findOne({ where: { serial: mobile.serial } })
-		// 	.then(mobile => {
-		// 		if (mobile) {
+				} else {
+					return {
+						error: true,
+						message: "Não foi possível gerar terminal",
+						id_mobile: mobile_result.dataValues.id_mobile,
+						versao_compativel: '3.0'
+					}
+				}
+			}).catch(err => {
+				console.log(err)
+			})
 
-		// 			return {
-		// 				error: true,
-		// 				message: "Não foi possível gerar terminal",
-		// 				mobile: mobile,
-		// 				versao_compativel: '3.0'
-		// 			}
-		// 		} else {
-		// 			this.Mobile.create(mobile)
-		// 				.then((result) => {
-		// 					return {
-		// 						error: false,
-		// 						message: "Celular cadastrado com sucesso",
-		// 						mobile: result,
-		// 						versao_compativel: "3.0"
-		// 					}
-		// 				}).catch(error => {
-		// 					return {
-		// 						error: true,
-		// 						message: "Erro ao gerar novo mobile. Erro:" + err
-		// 					}
-		// 				});
-		// 		}
-		// 	}).catch(err => {
-		// 		console.log(err)
-		// 	})
-
-		// return this.Mobile.create(mobile)
-		// 	.then(function (mobile) {
-		// 		return successResponse('Mobile inserido com sucesso.');
-		// 	}).catch(function (err) {
-		// 		return errorResponse(err.message);
-		// 	});
 	}
 }
 

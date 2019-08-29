@@ -46,6 +46,9 @@ class InteresseController {
       this.Interesse.create(interesse)
         
         }else {
+
+            console.log(this.Interesse);
+            
             this.Interesse.create(interesse)
         }
     }
