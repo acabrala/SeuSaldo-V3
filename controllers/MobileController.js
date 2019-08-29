@@ -52,9 +52,9 @@ class MobileController {
 	}
 
 
-	async update(mobile, idMobile) {
+	async update(mobile, idMobile) {		
 
-		this.Mobile.findOne({ where: { id_mobile: idMobile } })
+		return this.Mobile.findOne({ where: { id_mobile: idMobile } })
 			.then(mobile_cadastrado => {
 				if (!mobile_cadastrado) {
 
@@ -71,6 +71,8 @@ class MobileController {
 						return errorResponse(err)
 					})
 
+				} else {
+					return errorResponse("celular não cadastrado")
 				}
 			})
 	}
