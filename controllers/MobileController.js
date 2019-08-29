@@ -49,7 +49,30 @@ class MobileController {
 			}).catch(err => {
 				console.log(err)
 			})
+	}
 
+
+	async update(mobile, idMobile) {
+
+		this.Mobile.findOne({ where: { id_mobile: idMobile } })
+			.then(mobile_cadastrado => {
+				if (!mobile_cadastrado) {
+
+					this.Mobile.update(mobile, {
+						where:
+						{
+							id_mobile: idMobile
+						}
+					}).then(celular_Atualizado => {
+
+						return successResponse('Celular atualizado com sucesso')
+
+					}).catch(err => {
+						return errorResponse(err)
+					})
+
+				}
+			})
 	}
 }
 
