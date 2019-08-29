@@ -1,6 +1,7 @@
 const tokenGenerator = require('tokgen');
-const moment = require('moment')
-const momenTz = require('moment-timezone')
+const moment = require('moment');
+const momenTz = require('moment-timezone');
+const sender = require('../token/sender');
 
 const errorResponse = function (message) {
 	return {
@@ -34,7 +35,6 @@ class TokenController {
 				return errorResponse(err.message);
 			});
 	}
-
 }
 
 module.exports = TokenController;
