@@ -22,8 +22,7 @@ class MobileController {
 		return await this.Mobile.findOne({ where: { serial: mobile.serial } })
 			.then(mobile_result => {
 				if (!mobile_result) {
-					console.log(mobile)
-					this.Mobile.create(mobile)
+					return this.Mobile.create(mobile)
 						.then((result) => {
 							return {
 								error: false,
