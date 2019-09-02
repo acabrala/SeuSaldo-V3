@@ -21,6 +21,7 @@ const viagemExtraRouter = require('./routes/viagemExtra');
 const logsSaldoRouter = require('./routes/logs_saldo');
 const consumoGraficoRouter = require('./routes/consumoGrafico');
 const interesseRouter = require('./routes/interesse');
+const tokenRouter = require('./routes/token');
 
 const app = express();
 app.config = config;
@@ -49,5 +50,6 @@ viagemExtraRouter(app);
 logsSaldoRouter(app)
 consumoGraficoRouter(app)
 interesseRouter(app)
+tokenRouter(app)
 
 module.exports = app;

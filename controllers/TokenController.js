@@ -55,7 +55,7 @@ class TokenController {
 									id_usuario: id_usuario
 								}
 							}).then(result => {
-								return this.Token.create(token).then(novoToken => {
+								return this.Token.create(payload).then(novoToken => {
 									return successResponse('Novo token gerado')
 								})
 							})

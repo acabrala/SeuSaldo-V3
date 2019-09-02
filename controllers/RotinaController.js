@@ -50,14 +50,11 @@ class RotinaController {
 					diasRotinaUsuario.push(7)
 				} else {
 					diasRotinaUsuario.push(0)
-
 				}
 				if (diasWeekday.segunda == 1) {
 					diasRotinaUsuario.push(1)
-
 				} else {
 					diasRotinaUsuario.push(0)
-
 				}
 				if (diasWeekday.terca == 1) {
 					diasRotinaUsuario.push(2)
@@ -73,7 +70,6 @@ class RotinaController {
 					diasRotinaUsuario.push(4)
 				} else {
 					diasRotinaUsuario.push(0)
-
 				}
 				if (diasWeekday.sexta == 1) {
 					diasRotinaUsuario.push(5)
@@ -82,10 +78,8 @@ class RotinaController {
 				}
 				if (diasWeekday.sabado == 1) {
 					diasRotinaUsuario.push(6)
-
 				} else {
 					diasRotinaUsuario.push(0)
-
 				}
 
 				for (let i = 0; i <= diasRotinaUsuario.length - 1; i++) {
@@ -108,10 +102,12 @@ class RotinaController {
 
 	async createAll(userID, rotina, Detalhesrotina, diasWeekday, BilheteUnico, bilhete) {
 
+		let idaVolta = rotina.volta;
 		let diasRotinaUsuario = [];
 		let bu = await this.BilheteUnico.create(bilhete)
 
 		if (bu) {
+
 			rotina.usuario_id = userID;
 			return this.Rotina.create(rotina)
 				.then(function (rotina) {
@@ -165,20 +161,32 @@ class RotinaController {
 							id_rotina: rotina.dataValues.id,
 							id_bilhete: rotina.id_bilhete
 						}
-
 						Detalhesrotina.create(payload).then(results => {
 						});
 					}
 
+					if(rotina.volta === true) {
+
+						delete rotina.hora_ida
+						Rotina.create(rotina)
+							.then(rotinaVolta => {
+								for(let j = 0; j <= diasRotinaUsuario.length - 1; j++){
+									let payload = {
+										weekday: diasRotinaUsuario[j],
+										id_rotina: rotinaVolta.id,
+										id_bilhete: rotina.id_bilhete
+									}
+									Detalhesrotina.create(payload)
+								}
+							})
+					}	
 					return response;
 				}).catch(function (err) {
 					return errorResponse("Erro ao inserir suas rotinas. Erro: " + err.message);
 				});
 
 		} else {
-
-			return 
-
+			return errorResponse("Não conseguimos salvar seu bilhete único, tente novamente mais tarde.")
 		}
 	}
 
@@ -255,7 +263,6 @@ class RotinaController {
 					});
 				}
 			})
-
 			return successResponse('Rotina atualizada com sucesso.');
 		}).catch(function (err) {
 			return errorResponse("Erro ao atualizar suas rotinas. Erro: " + err.message);

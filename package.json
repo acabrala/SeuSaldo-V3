@@ -40,6 +40,7 @@
     "passport-jwt": "^4.0.0",
     "request": "^2.88.0",
     "sequelize": "^4.39.1",
+    "tokgen": "^1.0.0",
     "uuid-v4": "^0.1.0"
   }
 }

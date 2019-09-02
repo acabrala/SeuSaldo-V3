@@ -1,5 +1,5 @@
 module.exports = function(Sequelize, DataTypes){
-	var Mobile = Sequelize.define('mobile', {
+	var Mobile = Sequelize.define('Mobile', {
 		id_mobile: {
 		    type: DataTypes.INTEGER,
 		    primaryKey: true,
@@ -20,7 +20,8 @@ module.exports = function(Sequelize, DataTypes){
 	},
 	{
 		freezeTableName: true,
-		timestamps: false
+		timestamps: false,
+		tableName: 'mobile'
 	});
 	return Mobile;
 };
