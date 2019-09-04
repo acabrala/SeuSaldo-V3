@@ -108,6 +108,7 @@ class RotinaController {
 
 		if (bu) {
 
+			rotina.horario = rotina.hora_ida
 			rotina.usuario_id = userID;
 			return this.Rotina.create(rotina)
 				.then(function (rotina) {
@@ -168,6 +169,7 @@ class RotinaController {
 					if(rotina.volta === true) {
 
 						delete rotina.hora_ida
+						rotina.horario = rotina.hora_volta
 						Rotina.create(rotina)
 							.then(rotinaVolta => {
 								for(let j = 0; j <= diasRotinaUsuario.length - 1; j++){
