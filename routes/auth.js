@@ -62,7 +62,7 @@ module.exports = function (app) {
 
 									let usuarioJson = response
 
-									delete usuarioJson['error']
+
 									delete usuarioJson['usuario']['bilhete_unico']
 									delete usuarioJson['usuario']['rotina']
 
@@ -160,6 +160,8 @@ module.exports = function (app) {
 
 	app.post('/getUser', function (req, res) {
 
+		console.log(req.body)
+
 		let idsRotinas = req.body
 		let routesAll = [];
 		let diasSemana =
@@ -179,6 +181,7 @@ module.exports = function (app) {
 					if (!dias) {
 
 					} else {
+						console.log(dias)
 						for (let l = 0; l < dias.length; l++) {
 							// rotinaIds[diasSemana[l]] = dias[l].dataValues.weekday
 							if (dias[l].dataValues.weekday != 0) {

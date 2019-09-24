@@ -25,7 +25,7 @@ module.exports = function (app) {
 	});
 	app.post('/usuarios/:user_id/todas', ((req, res) => {
 
-		let userID = req.params.userID;
+		let userID = req.params.user_id;
 		let diasWeekday = {
 			domingo: req.body.domingo,
 			segunda: req.body.segunda,
@@ -37,18 +37,34 @@ module.exports = function (app) {
 		}
 
 		let bilhete_unico = {
-			numero_bilhete: req.body.numero_bilhete,
-			apelido_bilhete: req.body.apelido_bilhete,
-			is_bu: req.params.is_bus,
-			tipo_cartao: req.body.tipo_cartao
+			numero: req.body.numero_bilhete,
+			apelido: req.body.apelido_bilhete,
+			flag_bilhete_unico: req.body.is_bu,
+			tipo_cartao: req.body.tipo_cartao,
+			id_usuario: userID, 
+			saldo_comum: req.body.saldo_comum,
+			saldo_estudante: req.body.saldo_estudante,
+			saldo_vt: req.body.saldo_vt,
+			cota_diaria_trilho: req.body.cota_diaria_trilho,
+			cota_diaria_onibus: req.body.cota_diaria_onibus,
+			cota_onibus: req.body.cota_onibus,
+			cota_trilho: req.body.cota_trilho
 		}
 
+	console.log(bilhete_unico)
+	
 		rotinaController.createAll(userID, req.body, DetalhesRotina, diasWeekday, BilheteUnico, bilhete_unico)
 			.then((response) => {
+
+			console.log(response)
+
+			res.json(response)
 
 			})
 
 	}))
+
+
 
 	// Criar rotina
 	app.post('/usuarios/:user_id/rotinas', function (req, res) {

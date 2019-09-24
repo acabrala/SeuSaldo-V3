@@ -22,6 +22,6 @@ module.exports = function(Sequelize, DataTypes){
 		Rotina.hasMany(models.DetalhesRotina, {foreignKey: 'id_rotina', onDelete: 'CASCADE'});
 	}
 
-	
+	console.log("sousa")
 	return Rotina;
 };

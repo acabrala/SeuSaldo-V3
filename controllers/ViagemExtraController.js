@@ -127,21 +127,23 @@ class ViagemExtraController {
     }
 }
 function principal(saldoVt, saldoVe, saldoComum, quantidadeOnibus, quantidadeTrilho, quantidadeIntegracao, ultimaCarteira, passeLivreOnibus, passeLivreTrilho, cotaDiariaOnibus, cotaDiariaTrilho) {
-    
+    console.log(quantidadeOnibus, quantidadeTrilho, quantidadeIntegracao)
+
     if (quantidadeOnibus < 0) {
-        let onibus = retirarSaldoOnibus(quantidadeOnibus, saldoVt, saldoVe, saldoComum, passeLivreOnibus, passeLivreTrilho, cotaDiariaOnibus, cotaDiariaTrilho)
+        var onibus = retirarSaldoOnibus(quantidadeOnibus, saldoVt, saldoVe, saldoComum, passeLivreOnibus, passeLivreTrilho, cotaDiariaOnibus, cotaDiariaTrilho)
     } else {
-        let onibus = adicionarSaldoOnibus(quantidadeOnibus, saldoVt, saldoVe, saldoComum, ultimaCarteira, passeLivreOnibus, passeLivreTrilho, cotaDiariaOnibus, cotaDiariaTrilho)
+        var onibus = adicionarSaldoOnibus(quantidadeOnibus, saldoVt, saldoVe, saldoComum, ultimaCarteira, passeLivreOnibus, passeLivreTrilho, cotaDiariaOnibus, cotaDiariaTrilho)
     }
+    
     if (quantidadeTrilho < 0) {
-        let trilho = retirarSaldoTrilho(quantidadeTrilho, onibus.saldo_vt, onibus.saldo_ve, onibus.saldo_comum, onibus.passe_livre_onibus, onibus.passe_livre_trilho, onibus.diario_onibus, onibus.diario_trilho)
+        var trilho = retirarSaldoTrilho(quantidadeTrilho, onibus.saldo_vt, onibus.saldo_ve, onibus.saldo_comum, onibus.passe_livre_onibus, onibus.passe_livre_trilho, onibus.diario_onibus, onibus.diario_trilho)
     } else {
-        let trilho = adicionarSaldoTrilho(quantidadeTrilho, onibus.saldo_vt, onibus.saldo_ve, onibus.saldo_comum, ultimaCarteira, onibus.passe_livre_onibus, onibus.passe_livre_trilho, onibus.diario_onibus, onibus.diario_trilho)
+        var trilho = adicionarSaldoTrilho(quantidadeTrilho, onibus.saldo_vt, onibus.saldo_ve, onibus.saldo_comum, ultimaCarteira, onibus.passe_livre_onibus, onibus.passe_livre_trilho, onibus.diario_onibus, onibus.diario_trilho)
     }
     if (quantidadeIntegracao < 0) {
-        let integracao = retirarSaldoIntegracao(quantidadeIntegracao, trilho.saldo_vt, trilho.saldo_ve, trilho.saldo_comum, trilho.passe_livre_onibus, trilho.passe_livre_trilho, trilho.diario_onibus, trilho.diario_trilho)
+        var integracao = retirarSaldoIntegracao(quantidadeIntegracao, trilho.saldo_vt, trilho.saldo_ve, trilho.saldo_comum, trilho.passe_livre_onibus, trilho.passe_livre_trilho, trilho.diario_onibus, trilho.diario_trilho)
     } else {
-        let integracao = adicionarSaldoIntegracao(quantidadeIntegracao, trilho.saldo_vt, trilho.saldo_ve, trilho.saldo_comum, ultimaCarteira, trilho.passe_livre_onibus, trilho.passe_livre_trilho, trilho.diario_onibus, trilho.diario_trilho)
+        var integracao = adicionarSaldoIntegracao(quantidadeIntegracao, trilho.saldo_vt, trilho.saldo_ve, trilho.saldo_comum, ultimaCarteira, trilho.passe_livre_onibus, trilho.passe_livre_trilho, trilho.diario_onibus, trilho.diario_trilho)
     }
     
 

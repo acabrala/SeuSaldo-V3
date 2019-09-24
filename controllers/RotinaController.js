@@ -38,13 +38,86 @@ class RotinaController {
 		let diasRotinaUsuario = [];
 
 		return this.Rotina.create(rotina)
-			.then(function (rotina) {
+		.then(function (rotina) {
 
-				let response = {
-					error: false,
-					message: "Rotinas inseridas com sucesso!",
-					id: rotina.dataValues.id
-				};
+			let response = {
+				error: false,
+				message: "Rotinas inseridas com sucesso!",
+				id: rotina.dataValues.id
+			};
+
+			if (diasWeekday.domingo == 1) {
+				diasRotinaUsuario.push(7)
+			} else {
+				diasRotinaUsuario.push(0)
+			}
+			if (diasWeekday.segunda == 1) {
+				diasRotinaUsuario.push(1)
+			} else {
+				diasRotinaUsuario.push(0)
+			}
+			if (diasWeekday.terca == 1) {
+				diasRotinaUsuario.push(2)
+			} else {
+				diasRotinaUsuario.push(0)
+			}
+			if (diasWeekday.quarta == 1) {
+				diasRotinaUsuario.push(3)
+			} else {
+				diasRotinaUsuario.push(0)
+			}
+			if (diasWeekday.quinta == 1) {
+				diasRotinaUsuario.push(4)
+			} else {
+				diasRotinaUsuario.push(0)
+			}
+			if (diasWeekday.sexta == 1) {
+				diasRotinaUsuario.push(5)
+			} else {
+				diasRotinaUsuario.push(0)
+			}
+			if (diasWeekday.sabado == 1) {
+				diasRotinaUsuario.push(6)
+			} else {
+				diasRotinaUsuario.push(0)
+			}
+
+			for (let i = 0; i <= diasRotinaUsuario.length - 1; i++) {
+
+				let payload = {
+					weekday: diasRotinaUsuario[i],
+					id_rotina: rotina.dataValues.id,
+					id_bilhete: rotina.id_bilhete
+				}
+
+				Detalhesrotina.create(payload).then(results => {
+				});
+			}
+
+			return response;
+		}).catch(function (err) {
+			return errorResponse("Erro ao inserir suas rotinas. Erro: " + err.message);
+		});
+	}
+
+	async createAll(userID, rotina, Detalhesrotina, diasWeekday, BilheteUnico, bilhete) {
+		
+		let _this = this;
+		let idaVolta = rotina.volta;
+		let diasRotinaUsuario = [];
+		let ids = []
+		let response;
+		let bu = await BilheteUnico.create(bilhete)
+		if (bu) {
+
+
+			rotina.horario = rotina.hora_ida
+			rotina.usuario_id = userID;
+			rotina.id_bilhete = bu.dataValues.id
+			return this.Rotina.create(rotina)
+			.then(function (rotinaIda) {
+
+				ids.push(rotinaIda.dataValues.id)
 
 				if (diasWeekday.domingo == 1) {
 					diasRotinaUsuario.push(7)
@@ -86,106 +159,56 @@ class RotinaController {
 
 					let payload = {
 						weekday: diasRotinaUsuario[i],
-						id_rotina: rotina.dataValues.id,
-						id_bilhete: rotina.id_bilhete
+						id_rotina: rotinaIda.dataValues.id,
+						id_bilhete: rotinaIda.id_bilhete
 					}
 
-					Detalhesrotina.create(payload).then(results => {
-					});
+					Detalhesrotina.create(payload)
 				}
 
-				return response;
+				if(rotina.volta == true) {
+
+					const rotinaVolta = _this.createVolta(rotina)
+					.then(rotinaVolta => {
+						
+						ids.push(rotinaVolta.id)
+
+						for (let i = 0; i <= diasRotinaUsuario.length - 1; i++) {
+							let payload = {
+								weekday: diasRotinaUsuario[i],
+								id_rotina: rotinaVolta.id,
+								id_bilhete: rotinaVolta.id_bilhete
+							}
+
+							Detalhesrotina.create(payload)
+
+						}	
+						return response = {
+							error: false,
+							message: "Rotinas inseridas com sucesso!",
+							id_rotina: ids,
+							id_bilhete: rotinaVolta.id_bilhete
+						};		
+
+
+					})
+
+					return rotinaVolta
+				} else {
+
+					return response = {
+						error: false,
+						message: "Rotinas inseridas com sucesso!",
+						id_rotina: [rotinaIda.dataValues.id],
+						id_bilhete: rotinaIda.dataValues.id_bilhete
+					};
+
+				}
+
+
 			}).catch(function (err) {
 				return errorResponse("Erro ao inserir suas rotinas. Erro: " + err.message);
 			});
-	}
-
-	async createAll(userID, rotina, Detalhesrotina, diasWeekday, BilheteUnico, bilhete) {
-
-		let idaVolta = rotina.volta;
-		let diasRotinaUsuario = [];
-		let bu = await this.BilheteUnico.create(bilhete)
-
-		if (bu) {
-
-			rotina.horario = rotina.hora_ida
-			rotina.usuario_id = userID;
-			return this.Rotina.create(rotina)
-				.then(function (rotina) {
-
-					let response = {
-						error: false,
-						message: "Rotinas inseridas com sucesso!",
-						id: rotina.dataValues.id
-					};
-
-					if (diasWeekday.domingo == 1) {
-						diasRotinaUsuario.push(7)
-					} else {
-						diasRotinaUsuario.push(0)
-					}
-					if (diasWeekday.segunda == 1) {
-						diasRotinaUsuario.push(1)
-					} else {
-						diasRotinaUsuario.push(0)
-					}
-					if (diasWeekday.terca == 1) {
-						diasRotinaUsuario.push(2)
-					} else {
-						diasRotinaUsuario.push(0)
-					}
-					if (diasWeekday.quarta == 1) {
-						diasRotinaUsuario.push(3)
-					} else {
-						diasRotinaUsuario.push(0)
-					}
-					if (diasWeekday.quinta == 1) {
-						diasRotinaUsuario.push(4)
-					} else {
-						diasRotinaUsuario.push(0)
-					}
-					if (diasWeekday.sexta == 1) {
-						diasRotinaUsuario.push(5)
-					} else {
-						diasRotinaUsuario.push(0)
-					}
-					if (diasWeekday.sabado == 1) {
-						diasRotinaUsuario.push(6)
-					} else {
-						diasRotinaUsuario.push(0)
-					}
-
-					for (let i = 0; i <= diasRotinaUsuario.length - 1; i++) {
-
-						let payload = {
-							weekday: diasRotinaUsuario[i],
-							id_rotina: rotina.dataValues.id,
-							id_bilhete: rotina.id_bilhete
-						}
-						Detalhesrotina.create(payload).then(results => {
-						});
-					}
-
-					if(rotina.volta === true) {
-
-						delete rotina.hora_ida
-						rotina.horario = rotina.hora_volta
-						Rotina.create(rotina)
-							.then(rotinaVolta => {
-								for(let j = 0; j <= diasRotinaUsuario.length - 1; j++){
-									let payload = {
-										weekday: diasRotinaUsuario[j],
-										id_rotina: rotinaVolta.id,
-										id_bilhete: rotina.id_bilhete
-									}
-									Detalhesrotina.create(payload)
-								}
-							})
-					}	
-					return response;
-				}).catch(function (err) {
-					return errorResponse("Erro ao inserir suas rotinas. Erro: " + err.message);
-				});
 
 		} else {
 			return errorResponse("Não conseguimos salvar seu bilhete único, tente novamente mais tarde.")
@@ -197,6 +220,7 @@ class RotinaController {
 		let rotinaID = rotina.id;
 		let diasRotinaUsuario = [];
 		let idsDetalhesArray = []
+
 
 		return this.Rotina.update(rotina, {
 			where: {
@@ -284,14 +308,31 @@ class RotinaController {
 		});
 	}
 
+	async createVolta(rotinaVolta){
+		rotinaVolta.horario = rotinaVolta.hora_volta
+		const rotina_volta = await this.Rotina.create(rotinaVolta)
+		try {	
+			if(rotina_volta){
+				return rotina_volta.dataValues
+
+			}
+
+		} catch(e){
+
+		}
+
+	}
+
+
+
 	getRotina(rotinaID) {
 
 		return this.Rotina.findOne({ where: { id: rotinaID } })
-			.then(function (rotina) {
-				if (rotina) {
-					return rotina
-				}
-			});
+		.then(function (rotina) {
+			if (rotina) {
+				return rotina
+			}
+		});
 	};
 
 	deleteRotina(userID, rotinaID) {

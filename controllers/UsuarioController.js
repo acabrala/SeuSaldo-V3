@@ -222,7 +222,6 @@ class UsuarioController {
 										error: false,
 										usuario: usuarioFinal
 									};
-
 									return response;
 								})
 							} else {
@@ -282,14 +281,13 @@ class UsuarioController {
 
 	getDias(IdsRotinas) {
 
-		let uri = "http://www.zazzi.com.br:5000/getUser"
+		let uri = "http://www.zazzi.com.br:3000/getUser"
 
 		return axios.post(uri, IdsRotinas, {
 			headers: {
 				'Content-Type': 'application/json'
 			}
 		}).then(function (response) {
-
 			return {
 				error: false,
 				response: response.data

@@ -158,11 +158,13 @@ class TerminalController {
 
           let response = {
             escolar: {
+	      error: false,
               saldo_estudante: saldoEstudadnte,
               recarga_disponivel: resultado['900'].recargaDisponivel,
               estudante: true
             },
             cidadao: {
+	      error: false,
               saldo_comum: saldoComum,
               recargaDisponivel: resultado['500'].recargaDisponivel
             }

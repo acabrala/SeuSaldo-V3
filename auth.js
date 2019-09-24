@@ -33,6 +33,7 @@ module.exports = function (app) {
 		profileFields: ['id', 'displayName', 'photos', 'email', 'gender']
 	}, function (accessToken, refreshToken, profile, done) {
 		try {
+			console.log(accessToken, refreshToken, profile)
 			let userEmail = profile.emails[0].value; if (userEmail === 'undefined' || !userEmail) {
 				userEmail = null;
 			} var user = {

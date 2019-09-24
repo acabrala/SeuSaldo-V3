@@ -35,7 +35,6 @@ class TokenController {
 			data_criado: hora_atual,
 			id_mobile: id_mobile
 		}
-		console.log(token);
 		
 		let nome = token.nome;
 		return this.Token.findOne({
