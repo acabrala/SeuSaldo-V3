@@ -48,6 +48,13 @@ class UsuarioController {
 							if (googleUser) {
 								return errorResponse("Este email já está sendo utilizado em uma conta do Google.");
 							} else {
+
+								_this.find({ where: { mobile_cadastro: usuario.mobile_cadastro } })
+									.then(mobileUser => {
+										if (mobileUser.length >= 5) {
+											return errorResponse("Limite de cadastro excedido")
+										}
+									})
 								return _usuario
 									.create(usuario)
 									.then(function (usuario) {
@@ -121,6 +128,12 @@ class UsuarioController {
 					});
 				} else {
 					// Cria usuário
+					_usuario.find({ where: { mobile_cadastro: authUser.mobile_cadastro } })
+						.then(mobileUser => {
+							if (mobileUser.length >= 5) {
+								return errorResponse("Limite de cadastro excedido")
+							}
+						})
 					return _usuario
 						.create(authUser)
 						.then(function (usuario) {
@@ -186,6 +199,7 @@ class UsuarioController {
 				return errorResponse(err.message);
 			});
 	}
+
 	getUser(email, senha, bilheteUnico, rotina) {
 
 		let _usuario = this.Usuario;
@@ -197,8 +211,6 @@ class UsuarioController {
 					const payload = {
 						id: usuario.id
 					};
-
-
 
 					return _usuario.find({
 						include: [
@@ -260,6 +272,7 @@ class UsuarioController {
 				return errorResponse("Usuário não encontrado. Verifique se você já possui uma conta usando o Facebook ou Google.");
 			});
 	}
+
 	getRotinaId(rotinas, DetalhesRotina) {
 
 		for (let k = 0; k < rotinas.length; k++) {
@@ -351,7 +364,6 @@ class UsuarioController {
 		return usuario.dataValues.Rotinas
 
 	}
-
 
 	normalizeUser(usuario, bilhete, rotina) {
 		delete usuario.dataValues.BilheteUnicos;
@@ -489,7 +501,6 @@ class UsuarioController {
 				return errorResponse(err.message);
 			});
 	}
-
 
 	changeUserPassword(email, newPassword, passwordToken) {
 
